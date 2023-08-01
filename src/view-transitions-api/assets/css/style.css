@@ -1,0 +1,87 @@
+/* 共通 */
+:root {
+  background-color: #ccc;
+}
+.wrapper {
+  padding: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.container {
+  margin-top: 2rem;
+}
+.page-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+}
+.book {
+  display: block;
+  background-color: #fff;
+  border-radius: 0.25rem;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease-out;
+}
+.book-title {
+  font-size: 1.5rem;
+}
+.book-author {
+  font-size: 1rem;
+}
+.thumbnail {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 64/36;
+}
+.link {
+  display: block;
+}
+
+/* 書籍一覧 */
+:where([data-transition-wrapper='book-index']) .book-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+:where([data-transition-wrapper='book-index']) .book:hover {
+  box-shadow: 0 0 0.5rem 0.25rem rgba(0, 0, 0, 0.3);
+}
+:where([data-transition-wrapper='book-index']) .book-link {
+  display: grid;
+  grid-template-columns: [outer-start] 1rem [inner-start] 1fr [inner-end] 1rem [outer-start];
+  row-gap: 1rem;
+  padding-bottom: 1rem;
+}
+:where([data-transition-wrapper='book-index']) .book-link > * {
+  grid-column: inner;
+}
+:where([data-transition-wrapper='book-index']) .thumbnail {
+  grid-column: outer;
+}
+
+/* 詳細 */
+:where([data-transition-wrapper='book-detail']) .book {
+  padding-block: 1rem;
+  display: grid;
+  row-gap: 1.5rem;
+  grid-template-columns: [outer-start] 1rem [inner-start] 1fr [inner-end] 1rem [outer-start];
+  padding-bottom: 1rem;
+}
+:where([data-transition-wrapper='book-detail']) .book > * {
+  grid-column: inner;
+}
+:where([data-transition-wrapper='book-detail']) .back-link {
+  margin-top: 2rem;
+  font-size: 1rem;
+  font-weight: bold;
+  text-decoration: underline;
+}
+:where([data-transition-wrapper='book-detail']) .thumbnail {
+  grid-column: outer;
+}
+
+/* View Transitions API */
+*[data-view-transition-name] {
+  view-transition-name: var(--view-transition-name);
+  contain: paint;
+}

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>書籍一覧 | View Transitions API デモ</title>
+  </head>
+  <body>
+    <div class="wrapper" data-transition-wrapper="book-index">
+      <h1 class="page-title">書籍一覧</h1>
+      <div class="container">
+        <div class="book-list">
+          <article class="book">
+            <a class="book-link link" href="./detail/01/">
+              <img
+                class="thumbnail"
+                data-view-transition-name="thumbnail-1"
+                style="--view-transition-name: thumbnail-1"
+                src="https://picsum.photos/id/111/640/360"
+                width="640"
+                height="360"
+                alt=""
+                decoding="async"
+              />
+              <h2
+                class="book-title"
+                data-view-transition-name="title-1"
+                style="--view-transition-name: title-1"
+              >
+                吾輩は猫である
+              </h2>
+              <div class="book-author">夏目 漱石</div>
+            </a>
+          </article>
+          <article class="book">
+            <a class="book-link link" href="./detail/02/">
+              <img
+                class="thumbnail"
+                data-view-transition-name="thumbnail-2"
+                style="--view-transition-name: thumbnail-2"
+                src="https://picsum.photos/id/555/640/360"
+                width="640"
+                height="360"
+                alt=""
+                decoding="async"
+              />
+              <h2
+                class="book-title"
+                data-view-transition-name="title-2"
+                style="--view-transition-name: title-2"
+              >
+                羅生門
+              </h2>
+              <div class="book-author">芥川 竜之介</div>
+            </a>
+          </article>
+          <article class="book">
+            <a class="book-link link" href="./detail/03/">
+              <img
+                class="thumbnail"
+                data-view-transition-name="thumbnail-3"
+                style="--view-transition-name: thumbnail-3"
+                src="https://picsum.photos/id/999/640/360"
+                width="640"
+                height="360"
+                alt=""
+                decoding="async"
+              />
+              <h2 class="book-title" style="--view-transition-name: title-3">
+                注文の多い料理店
+              </h2>
+              <div class="book-author">宮沢 賢治</div>
+            </a>
+          </article>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="./assets/js/main.js"></script>
+  </body>
+</html>
