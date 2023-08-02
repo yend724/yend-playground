@@ -1,54 +1,58 @@
+@import 'destyle.css' layer(reset);
+
 /* 共通 */
-:root {
-  background-color: #ccc;
-}
-.wrapper {
-  display: grid;
-  grid-template-rows: 1fr auto;
-  min-height: 100vh;
-  max-width: 1000px;
-  margin: 0 auto;
-  padding-inline: 2rem;
-  padding-top: 2rem;
-  padding-bottom: 1rem;
-}
-.container {
-  margin-top: 2rem;
-}
-.page-title {
-  font-size: 1.5rem;
-  font-weight: bold;
-  text-align: center;
-}
-.book {
-  display: block;
-  background-color: #fff;
-  border-radius: 0.25rem;
-  overflow: hidden;
-  transition: box-shadow 0.2s ease-out;
-}
-.book-title {
-  font-size: 1.5rem;
-}
-.book-author {
-  font-size: 1rem;
-}
-.thumbnail {
-  width: 100%;
-  height: auto;
-  aspect-ratio: 64/36;
-}
-.link {
-  display: block;
-}
-.footer {
-  margin-top: 4rem;
-  font-size: 0.8rem;
-  text-align: center;
+@layer common {
+  :root {
+    background-color: #ccc;
+  }
+  .wrapper {
+    display: grid;
+    grid-template-rows: 1fr auto;
+    min-height: 100vh;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding-inline: 2rem;
+    padding-top: 2rem;
+    padding-bottom: 1rem;
+  }
+  .container {
+    margin-top: 2rem;
+  }
+  .page-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+  }
+  .book {
+    display: block;
+    background-color: #fff;
+    border-radius: 0.25rem;
+    overflow: hidden;
+    transition: box-shadow 0.2s ease-out;
+  }
+  .book-title {
+    font-size: 1.5rem;
+  }
+  .book-author {
+    font-size: 1rem;
+  }
+  .thumbnail {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 64/36;
+  }
+  .link {
+    display: block;
+  }
+  .footer {
+    margin-top: 4rem;
+    font-size: 0.8rem;
+    text-align: center;
+  }
 }
 
 /* 書籍一覧 */
-:where([data-transition-wrapper='book-index']) .book-list {
+/* :where([data-transition-wrapper='book-index']) .book-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 2rem;
@@ -67,10 +71,10 @@
 }
 :where([data-transition-wrapper='book-index']) .thumbnail {
   grid-column: outer;
-}
+} */
 
 /* 詳細 */
-:where([data-transition-wrapper='book-detail']) .book {
+/* :where([data-transition-wrapper='book-detail']) .book {
   padding-block: 1rem;
   display: grid;
   row-gap: 1.5rem;
@@ -89,6 +93,7 @@
 :where([data-transition-wrapper='book-detail']) .thumbnail {
   grid-column: outer;
 }
+*/
 
 /* View Transitions API */
 *[data-view-transition-name] {

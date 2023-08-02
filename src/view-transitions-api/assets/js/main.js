@@ -1,12 +1,29 @@
-import 'destyle.css';
-import '../css/style.css';
+const cssCache = new Map();
 
-const getHTML = async href => {
-  return fetch(href).then(res => res.text());
+const links = document.querySelectorAll('link');
+links.forEach(link => {
+  cssCache.set(new URL(link.href).pathname, link);
+});
+
+const createLink = url => {
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = url;
+  document.head.appendChild(link);
+  return link;
 };
+const insertCSS = async url => {
+  if (!cssCache.has(url)) {
+    cssCache.set(url, createLink(url));
+  }
+};
+
 const parser = new DOMParser();
 const parseHTML = html => {
   return parser.parseFromString(html, 'text/html');
+};
+const getHTML = async url => {
+  return fetch(url).then(res => res.text());
 };
 const swap = async toHtml => {
   return document.startViewTransition(() => {
@@ -28,7 +45,16 @@ const shouldNotIntercept = navigationEvent => {
 navigation.addEventListener('navigate', e => {
   if (shouldNotIntercept(e)) return;
   const url = new URL(e.destination.url);
+  const pathanme = url.pathname;
+
   const loadNextPage = async () => {
+    if (pathanme === '/view-transitions-api/') {
+      insertCSS('/assets/css/index.css');
+    }
+    if (pathanme.startsWith('/view-transitions-api/detail/')) {
+      insertCSS('/assets/css/detail.css');
+    }
+
     const htmlString = await getHTML(url.href);
     const parsedHTML = parseHTML(htmlString);
     await swap(parsedHTML);

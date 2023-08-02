@@ -1,0 +1,25 @@
+/* 書籍一覧 */
+@layer page {
+  *[data-transition-wrapper='book-index'] {
+    .book-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+    .book:hover {
+      box-shadow: 0 0 0.5rem 0.25rem rgba(0, 0, 0, 0.3);
+    }
+    .book-link {
+      display: grid;
+      grid-template-columns: [outer-start] 1rem [inner-start] 1fr [inner-end] 1rem [outer-start];
+      row-gap: 1rem;
+      padding-bottom: 1rem;
+    }
+    .book-link > * {
+      grid-column: inner;
+    }
+    .thumbnail {
+      grid-column: outer;
+    }
+  }
+}

@@ -1,0 +1,23 @@
+@layer page {
+  *[data-transition-wrapper='book-detail'] {
+    .book {
+      padding-block: 1rem;
+      display: grid;
+      row-gap: 1.5rem;
+      grid-template-columns: [outer-start] 1rem [inner-start] 1fr [inner-end] 1rem [outer-start];
+      padding-bottom: 1rem;
+    }
+    .book > * {
+      grid-column: inner;
+    }
+    .back-link {
+      margin-top: 2rem;
+      font-size: 1rem;
+      font-weight: bold;
+      text-decoration: underline;
+    }
+    .thumbnail {
+      grid-column: outer;
+    }
+  }
+}
