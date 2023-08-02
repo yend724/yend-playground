@@ -32,6 +32,7 @@ navigation.addEventListener('navigate', e => {
     const htmlString = await getHTML(url.href);
     const parsedHTML = parseHTML(htmlString);
     await swap(parsedHTML);
+    document.title = parsedHTML.title;
   };
   e.intercept({ handler: loadNextPage });
 });
