@@ -1,14 +1,29 @@
 @layer page {
-  *[data-transition-wrapper='book-detail'] {
+  :where(*[data-transition-wrapper='book-detail']) {
     .book {
-      padding-block: 1rem;
       display: grid;
       row-gap: 1.5rem;
       grid-template-columns: [outer-start] 1rem [inner-start] 1fr [inner-end] 1rem [outer-start];
+      padding-block: 1rem;
       padding-bottom: 1rem;
+      background-color: #fff;
+      border-radius: 0.25rem;
+      overflow: hidden;
     }
     .book > * {
       grid-column: inner;
+    }
+    .book-title {
+      font-size: 1.5rem;
+      font-weight: 500;
+    }
+    .book-author {
+      font-size: 1rem;
+    }
+    .thumbnail {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 64/36;
     }
     .back-link {
       margin-top: 2rem;
