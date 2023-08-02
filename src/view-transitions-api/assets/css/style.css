@@ -3,9 +3,14 @@
   background-color: #ccc;
 }
 .wrapper {
-  padding: 2rem;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  min-height: 100vh;
   max-width: 1000px;
   margin: 0 auto;
+  padding-inline: 2rem;
+  padding-top: 2rem;
+  padding-bottom: 1rem;
 }
 .container {
   margin-top: 2rem;
@@ -35,6 +40,11 @@
 }
 .link {
   display: block;
+}
+.footer {
+  margin-top: 4rem;
+  font-size: 0.8rem;
+  text-align: center;
 }
 
 /* 書籍一覧 */
