@@ -16,28 +16,28 @@ const swap = async toHtml => {
   }).finished;
 };
 
-const init = () => {
-  document.addEventListener('click', async e => {
-    e.preventDefault();
-    let linkElement = e.target;
-    if (linkElement instanceof HTMLElement && linkElement.tagName !== 'A') {
-      linkElement = linkElement.closest('a');
-    }
-    if (linkElement) {
-      const htmlString = await getHTML(linkElement.href);
-      const parsedHTML = parseHTML(htmlString);
-      await swap(parsedHTML);
-      history.pushState({}, '', linkElement.href);
-    }
-  });
+const shouldNotIntercept = navigationEvent => {
+  // 参考: https://developer.chrome.com/docs/web-platform/navigation-api/#deciding-how-to-handle-a-navigation
+  return (
+    !navigationEvent.canIntercept ||
+    navigationEvent.hashChange ||
+    navigationEvent.downloadRequest ||
+    navigationEvent.formData
+  );
 };
-
-const handlePopState = async e => {
-  const { target } = e;
-  const htmlString = await getHTML(target.location.href);
-  const parsedHTML = parseHTML(htmlString);
-  await swap(parsedHTML);
-};
-
-window.addEventListener('DOMContentLoaded', init);
-window.addEventListener('popstate', handlePopState);
+navigation.addEventListener('navigate', e => {
+  if (shouldNotIntercept(e)) return;
+  const url = new URL(e.destination.url);
+  const loadNextPage = async () => {
+    const htmlString = await getHTML(url.href);
+    const parsedHTML = parseHTML(htmlString);
+    await swap(parsedHTML);
+  };
+  e.intercept({ handler: loadNextPage });
+});
+navigation.addEventListener('navigatesuccess', e => {
+  console.log(e);
+});
+navigation.addEventListener('navigateerror', e => {
+  console.error(e);
+});
