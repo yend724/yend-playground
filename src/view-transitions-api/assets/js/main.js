@@ -30,7 +30,7 @@ const swap = async toHtml => {
     const to = toHtml.querySelector('*[data-transition-wrapper]');
     const from = document.querySelector('*[data-transition-wrapper]');
     from.replaceWith(to);
-  }).finished;
+  }).updateCallbackDone;
 };
 
 const shouldNotIntercept = navigationEvent => {
