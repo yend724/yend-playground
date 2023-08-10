@@ -13,6 +13,7 @@
     "vite": "^4.4.5"
   },
   "dependencies": {
-    "destyle.css": "^4.0.0"
+    "destyle.css": "^4.0.0",
+    "fast-glob": "^3.3.1"
   }
 }
