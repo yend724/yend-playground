@@ -12,9 +12,20 @@ const createLink = url => {
   document.head.appendChild(link);
   return link;
 };
-const insertCSS = async url => {
+const setCssCache = url => {
   if (!cssCache.has(url)) {
-    cssCache.set(url, createLink(url));
+    const link = createLink(url);
+    cssCache.set(url, link);
+    return link;
+  }
+  return null;
+};
+const insertCSS = pathanme => {
+  if (pathanme === '/view-transitions-api/') {
+    return setCssCache('/assets/css/index.css');
+  }
+  if (pathanme.startsWith('/view-transitions-api/detail/')) {
+    return setCssCache('/assets/css/detail.css');
   }
 };
 
@@ -48,15 +59,18 @@ navigation.addEventListener('navigate', e => {
   const pathanme = url.pathname;
 
   const loadNextPage = async () => {
-    if (pathanme === '/view-transitions-api/') {
-      insertCSS('/assets/css/index.css');
-    }
-    if (pathanme.startsWith('/view-transitions-api/detail/')) {
-      insertCSS('/assets/css/detail.css');
-    }
-
     const htmlString = await getHTML(url.href);
     const parsedHTML = parseHTML(htmlString);
+
+    const linkElement = insertCSS(pathanme);
+    if (linkElement) {
+      linkElement.addEventListener('load', async () => {
+        await swap(parsedHTML);
+        document.title = parsedHTML.title;
+      });
+      return;
+    }
+
     await swap(parsedHTML);
     document.title = parsedHTML.title;
   };
