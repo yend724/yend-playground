@@ -20,12 +20,12 @@ const setCssCache = url => {
   }
   return null;
 };
-const insertCSS = pathanme => {
-  if (pathanme === '/view-transitions-api/') {
-    return setCssCache('/assets/css/index.css');
+const insertCSS = pathname => {
+  if (pathname === '/view-transitions-api/') {
+    return setCssCache('/view-transitions-api/assets/css/index.css');
   }
-  if (pathanme.startsWith('/view-transitions-api/detail/')) {
-    return setCssCache('/assets/css/detail.css');
+  if (pathname.startsWith('/view-transitions-api/detail/')) {
+    return setCssCache('/view-transitions-api/assets/css/detail.css');
   }
 };
 
@@ -56,13 +56,13 @@ const shouldNotIntercept = navigationEvent => {
 navigation.addEventListener('navigate', e => {
   if (shouldNotIntercept(e)) return;
   const url = new URL(e.destination.url);
-  const pathanme = url.pathname;
+  const pathname = url.pathname;
 
   const loadNextPage = async () => {
     const htmlString = await getHTML(url.href);
     const parsedHTML = parseHTML(htmlString);
 
-    const linkElement = insertCSS(pathanme);
+    const linkElement = insertCSS(pathname);
     if (linkElement) {
       linkElement.addEventListener('load', async () => {
         await swap(parsedHTML);

@@ -1,4 +1,4 @@
-@import 'destyle.css' layer(reset);
+@import '../../../assets/css/destyle.css' layer(reset);
 
 /* 共通 */
 @layer common {
