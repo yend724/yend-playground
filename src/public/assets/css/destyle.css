@@ -204,3 +204,6 @@ th {
   text-align: left;
   font-weight: 700;
 }
+canvas {
+  vertical-align: bottom;
+}
