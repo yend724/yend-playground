@@ -76,7 +76,6 @@ const app = (texture: THREE.Texture) => {
 
   const tick = () => {
     requestAnimationFrame(tick);
-    material.uniforms.uScreenAspect.value = uniforms.uScreenAspect.value;
 
     renderer.render(scene, camera);
   };
@@ -90,7 +89,7 @@ const app = (texture: THREE.Texture) => {
       windowSize.height
     );
 
-    uniforms.uScreenAspect.value = windowSize.aspect;
+    material.uniforms.uScreenAspect.value = windowSize.aspect;
 
     camera.left = windowSize.width / -2;
     camera.right = windowSize.width / 2;
