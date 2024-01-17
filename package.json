@@ -1,5 +1,5 @@
 {
-  "name": "view-transitions-api",
+  "name": "yend-playground",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -13,7 +13,9 @@
     "vite": "^4.4.5"
   },
   "dependencies": {
+    "@types/three": "^0.160.0",
     "destyle.css": "^4.0.0",
-    "fast-glob": "^3.3.1"
+    "fast-glob": "^3.3.1",
+    "three": "^0.160.0"
   }
 }
