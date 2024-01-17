@@ -5,20 +5,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Fit Texture Width</title>
     <link rel="stylesheet" href="/assets/css/destyle.css" />
-    <script src="./ts/index.ts" type="module"></script>
-    <style>
-      .sr-only {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        padding: 0;
-        margin: -1px;
-        overflow: hidden;
-        clip: rect(0, 0, 0, 0);
-        white-space: nowrap;
-        border-width: 0;
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <script type="module" src="../assets/ts/index.ts"></script>
+    <script id="vertexShader" type="x-shader/x-vertex">
+      varying vec2 vUv;
+      void main() {
+        vUv = uv;
+        vec4 worldPosition = modelMatrix * vec4( position, 1.0 );
+        vec4 mvPosition =  viewMatrix * worldPosition;
+        gl_Position = projectionMatrix * mvPosition;
       }
-    </style>
+    </script>
+    <script id="fragmentShader" type="x-shader/x-fragment">
+      uniform sampler2D uTexture;
+      uniform float uTextureAspect;
+      uniform float uScreenAspect;
+      varying vec2 vUv;
+
+      void main() {
+        // アスペクト比からテクスチャの比率を計算
+        // 幅は常に1.0にする
+        vec2 ratio = vec2(
+          1.0,
+          uTextureAspect / uScreenAspect
+        );
+        // 中央に配置するための計算
+        vec2 textureUv = vec2(
+          (vUv.x - 0.5) * ratio.x + 0.5,
+          (vUv.y - 0.5) * ratio.y + 0.5
+        );
+
+        vec4 color = texture2D(uTexture, textureUv);
+
+        // テクスチャの範囲外は黒にする
+        vec4 black = vec4(0.0, 0.0, 0.0, 1.0);
+        float outOfBounds = float(textureUv.x < 0.0 || textureUv.x > 1.0 || textureUv.y < 0.0 || textureUv.y > 1.0);
+
+        gl_FragColor = mix(color, black, outOfBounds);
+      }
+    </script>
   </head>
   <body>
     <h1 class="sr-only">Fit Texture Width</h1>

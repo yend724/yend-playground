@@ -1,6 +1,4 @@
 import * as THREE from 'three';
-import FragmentShader from '../shader/fragmentShader.frag?raw';
-import VertexShader from '../shader/vertexShader.vert?raw';
 import Texture from '../../assets/img/texture.png';
 
 const canvas = document.querySelector<HTMLCanvasElement>('#canvas');
@@ -17,6 +15,16 @@ const getWindowSize = () => {
     aspect,
   };
 };
+const getShader = (id: string) => {
+  const script = document.querySelector<HTMLScriptElement>(`#${id}`);
+  if (!script) {
+    throw new Error(`script not found: ${id}`);
+  }
+  return script.innerText;
+};
+
+const FragmentShader = getShader('fragmentShader');
+const VertexShader = getShader('vertexShader');
 
 const app = (texture: THREE.Texture) => {
   const windowSize = getWindowSize();

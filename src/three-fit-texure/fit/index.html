@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Fit Texture Contain Repeat</title>
+    <title>Fit Texture Width</title>
     <link rel="stylesheet" href="/assets/css/destyle.css" />
     <link rel="stylesheet" href="../assets/css/style.css" />
     <script type="module" src="../assets/ts/index.ts"></script>
@@ -18,31 +18,17 @@
     </script>
     <script id="fragmentShader" type="x-shader/x-fragment">
       uniform sampler2D uTexture;
-      uniform float uTextureAspect;
-      uniform float uScreenAspect;
       varying vec2 vUv;
 
       void main() {
-        // アスペクト比からテクスチャの比率を計算
-        vec2 ratio = vec2(
-          max(uScreenAspect / uTextureAspect, 1.0),
-          max(uTextureAspect / uScreenAspect, 1.0)
-        );
-        // 中央に配置するための計算
-        vec2 textureUv = vec2(
-          (vUv.x - 0.5) * ratio.x + 0.5,
-          (vUv.y - 0.5) * ratio.y + 0.5
-        );
-
-        // fractでリピートする
-        vec4 color = texture2D(uTexture, fract(textureUv));
+        vec4 color = texture2D(uTexture, vUv);
 
         gl_FragColor = color;
       }
     </script>
   </head>
   <body>
-    <h1 class="sr-only">Fit Texture Contain Repeat</h1>
+    <h1 class="sr-only">Fit Texture Width</h1>
     <canvas id="canvas"></canvas>
   </body>
 </html>
