@@ -36,11 +36,9 @@
         );
 
         vec4 color = texture2D(uTexture, textureUv);
-
         // テクスチャの範囲外は黒にする
         vec4 black = vec4(0.0, 0.0, 0.0, 1.0);
         float outOfBounds = float(textureUv.x < 0.0 || textureUv.x > 1.0 || textureUv.y < 0.0 || textureUv.y > 1.0);
-
         gl_FragColor = mix(color, black, outOfBounds);
       }
     </script>
