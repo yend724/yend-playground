@@ -41,6 +41,7 @@ const app = (texture: THREE.Texture) => {
   const scene = new THREE.Scene();
 
   // cameraの作成
+  // vertexShaderでMVPの変換を行わないので、cameraは空のものを渡す
   const camera = new THREE.Camera();
 
   // textureのアスペクト比を取得
