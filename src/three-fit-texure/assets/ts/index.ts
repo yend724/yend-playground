@@ -41,7 +41,9 @@ const app = (texture: THREE.Texture) => {
   const scene = new THREE.Scene();
 
   // cameraの作成
-  const camera = new THREE.Camera();
+  const camera = new THREE.OrthographicCamera();
+  // パフォーマンスを考慮する場合、matrixAutoUpdateをfalseにする
+  camera.matrixAutoUpdate = false;
 
   // textureのアスペクト比を取得
   const textureImg = texture.image as HTMLImageElement;
