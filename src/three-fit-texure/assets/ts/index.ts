@@ -41,18 +41,7 @@ const app = (texture: THREE.Texture) => {
   const scene = new THREE.Scene();
 
   // cameraの作成
-  // OrthographicCameraでwindowサイズを指定
-  const camera = new THREE.OrthographicCamera(
-    windowSize.width / -2,
-    windowSize.width / 2,
-    windowSize.height / 2,
-    windowSize.height / -2,
-    1,
-    10
-  );
-  // cameraの位置を指定
-  camera.position.z = 5;
-  scene.add(camera);
+  const camera = new THREE.Camera();
 
   // textureのアスペクト比を取得
   const textureImg = texture.image as HTMLImageElement;
@@ -74,7 +63,7 @@ const app = (texture: THREE.Texture) => {
     },
   };
   // planeの作成
-  const geometry = new THREE.PlaneGeometry(windowSize.width, windowSize.height);
+  const geometry = new THREE.PlaneGeometry(2, 2);
   const material = new THREE.ShaderMaterial({
     uniforms,
     vertexShader: VertexShader,
@@ -94,21 +83,8 @@ const app = (texture: THREE.Texture) => {
   const onResize = () => {
     const windowSize = getWindowSize();
 
-    // planeのサイズをwindowのサイズに合わせる
-    plane.geometry = new THREE.PlaneGeometry(
-      windowSize.width,
-      windowSize.height
-    );
-
     // uniformで渡しているwindowのアスペクト比を更新
     material.uniforms.uScreenAspect.value = windowSize.aspect;
-
-    // cameraを更新
-    camera.left = windowSize.width / -2;
-    camera.right = windowSize.width / 2;
-    camera.top = windowSize.height / 2;
-    camera.bottom = windowSize.height / -2;
-    camera.updateProjectionMatrix();
 
     // rendererを更新
     renderer.setPixelRatio(window.devicePixelRatio);
