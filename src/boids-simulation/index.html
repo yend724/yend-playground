@@ -51,15 +51,24 @@
         position: absolute;
         top: 3rem;
         left: 1rem;
-        display: flex;
+        display: grid;
         gap: 1rem;
+        color: #fff;
         z-index: 1;
       }
+      .control-group {
+        font-size: 0.8rem;
+      }
       .control-button {
+        color: inherit;
         padding: 0.5rem;
-        color: white;
         background-color: rgba(255, 255, 255, 0.3);
         border-radius: 0.25rem;
+      }
+      .control-group-row {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
       }
       @media (any-hover: hover) {
         .control-button:hover {
@@ -72,9 +81,27 @@
     <div class="wrapper">
       <h1 class="title">Boids Simulation</h1>
       <div class="controls">
-        <button class="control-button" id="start">Start</button>
-        <button class="control-button" id="stop">Stop</button>
-        <button class="control-button" id="reset">Reset</button>
+        <div class="control-group">
+          <div class="control-group-row">
+            <button class="control-button" id="start">Start</button>
+            <button class="control-button" id="stop">Stop</button>
+            <button class="control-button" id="reset">Reset</button>
+          </div>
+        </div>
+        <div class="control-group">
+          <div class="control-group-row">
+            <label for="boids-count">Boids Count</label>
+            <input
+              type="range"
+              id="boids-count"
+              min="1"
+              max="1000"
+              step="1"
+              value="100"
+            />
+            <span id="boids-count-output">100</span>
+          </div>
+        </div>
       </div>
       <canvas id="canvas" class="canvas"></canvas>
     </div>

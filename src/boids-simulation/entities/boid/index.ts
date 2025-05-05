@@ -66,7 +66,10 @@ export class Boid {
       const dot = this.direction.x * deltaX + this.direction.y * deltaY;
       if (dot <= 0) continue;
 
-      const distance = Math.hypot(deltaX, deltaY);
+      const distance = length({
+        x: deltaX,
+        y: deltaY,
+      });
       if (distance < minDistance) {
         minDistance = distance;
         nearestNeighbor = boid;
