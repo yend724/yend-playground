@@ -10,6 +10,7 @@ import {
 
 export class BoidSimulation {
   #boids: Boid[] = [];
+  #boidsCount: number = BOID_COUNT;
   #ctx: CanvasRenderingContext2D;
   #loop: number | null = null;
   #coreBehaviors: Behavior[] = []; // 常に適用される基本的な振る舞い
@@ -17,7 +18,7 @@ export class BoidSimulation {
 
   constructor(ctx: CanvasRenderingContext2D) {
     this.#ctx = ctx;
-    this.#boids = this.#createBoids();
+    this.#boids = this.#createBoids(this.#boidsCount);
     this.#coreBehaviors = [
       cohesionBehavior,
       alignmentBehavior,
@@ -26,7 +27,7 @@ export class BoidSimulation {
   }
 
   /** ボイドを作成 */
-  #createBoids(count: number = BOID_COUNT): Boid[] {
+  #createBoids(count: number): Boid[] {
     const boids: Boid[] = [];
     for (let i = 0; i < count; i++) {
       const color = `hsl(${Math.random() * 360}, 100%, 50%)`;
@@ -47,16 +48,44 @@ export class BoidSimulation {
     return boids;
   }
 
+  /** ボイドを追加 */
+  #appendBoids(count: number) {
+    for (let i = 0; i < count; i++) {
+      const color = `hsl(${Math.random() * 360}, 100%, 50%)`;
+      const theta = Math.random() * 2 * Math.PI;
+      const position = {
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+      };
+
+      this.#boids.push(
+        new Boid({
+          position,
+          direction: { x: Math.cos(theta), y: Math.sin(theta) },
+          velocity: BOID_VELOCITY + Math.random() * 4,
+          color,
+          flock: this.#boids,
+        })
+      );
+    }
+  }
+
+  /** ボイドを削除 */
+  #removeBoids(count: number) {
+    for (let i = 0; i < count; i++) {
+      this.#boids.pop();
+    }
+  }
+
   /** 群れの重心を計算 */
   #calcFlockCenter(): { x: number; y: number } {
     let x = 0;
     let y = 0;
-    const boidsCount = this.#boids.length;
     for (const b of this.#boids) {
       x += b.position.x;
       y += b.position.y;
     }
-    return { x: x / boidsCount, y: y / boidsCount };
+    return { x: x / this.#boidsCount, y: y / this.#boidsCount };
   }
 
   /** 1フレーム分の実行 */
@@ -78,8 +107,14 @@ export class BoidSimulation {
   updateBoidsCount(value: number) {
     if (value < 1) return;
     if (value > 1000) return;
-    this.clear();
-    this.#boids = this.#createBoids(value);
+
+    this.#boidsCount = value;
+
+    if (value > this.#boids.length) {
+      this.#appendBoids(value - this.#boids.length);
+    } else {
+      this.#removeBoids(this.#boids.length - value);
+    }
   }
 
   applyPointerAttraction(pointerPosition: Vector) {
@@ -124,14 +159,8 @@ export class BoidSimulation {
 
   /** アニメーションリセット */
   reset() {
-    this.clear();
-    this.#boids = this.#createBoids();
+    this.#boids = this.#createBoids(this.#boidsCount);
     if (this.#loop) return;
     this.start();
-  }
-
-  /** ボイドをクリア */
-  clear() {
-    this.#boids = [];
   }
 }

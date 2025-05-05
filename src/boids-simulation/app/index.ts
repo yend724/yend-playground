@@ -1,6 +1,7 @@
 import { debounce } from '../shared/libs/bounce';
 import { BoidSimulation } from '../features/boid-simulation';
 
+const controls = document.querySelector<HTMLDivElement>('#controls');
 const startButton = document.querySelector<HTMLButtonElement>('#start');
 const stopButton = document.querySelector<HTMLButtonElement>('#stop');
 const resetButton = document.querySelector<HTMLButtonElement>('#reset');
@@ -10,6 +11,7 @@ const boidsCountOutput = document.querySelector<HTMLSpanElement>(
   '#boids-count-output'
 );
 
+if (!controls) throw new Error('Controls を取得できませんでした');
 if (!startButton) throw new Error('Start ボタンを取得できませんでした');
 if (!stopButton) throw new Error('Stop ボタンを取得できませんでした');
 if (!resetButton) throw new Error('Reset ボタンを取得できませんでした');
@@ -43,6 +45,7 @@ const handlePointerPosition = (x: number, y: number) => {
 };
 
 window.addEventListener('pointerdown', e => {
+  console.log('pointerdown');
   isPointerDown = true;
   handlePointerPosition(e.clientX, e.clientY);
 });
@@ -54,6 +57,10 @@ window.addEventListener('pointermove', e => {
 window.addEventListener('pointerup', () => {
   isPointerDown = false;
   removePointerForce();
+});
+
+controls.addEventListener('pointerdown', e => {
+  e.stopPropagation();
 });
 
 startButton.addEventListener('click', () => {
