@@ -45,7 +45,6 @@ const handlePointerPosition = (x: number, y: number) => {
 };
 
 window.addEventListener('pointerdown', e => {
-  console.log('pointerdown');
   isPointerDown = true;
   handlePointerPosition(e.clientX, e.clientY);
 });
