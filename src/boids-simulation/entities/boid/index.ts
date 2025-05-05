@@ -14,7 +14,6 @@ export class Boid {
   flock: Boid[];
   nearestNeighbor: Boid;
   color: string;
-  behaviors: Behavior[];
 
   constructor({
     position,
@@ -22,14 +21,12 @@ export class Boid {
     velocity,
     color,
     flock,
-    behaviors,
   }: {
     position: Vector;
     direction: Vector;
     velocity: number;
     color: string;
     flock: Boid[];
-    behaviors: Behavior[];
   }) {
     this.position = position;
     this.direction = direction;
@@ -37,7 +34,6 @@ export class Boid {
     this.flock = flock;
     this.nearestNeighbor = this;
     this.color = color;
-    this.behaviors = behaviors;
   }
 
   /** 描画 */
@@ -80,13 +76,18 @@ export class Boid {
   }
 
   /** 1ステップ分の更新 */
-  update(flockCenter: Vector) {
+  update({
+    flockCenter,
+    behaviors,
+  }: {
+    flockCenter: Vector;
+    behaviors: Behavior[];
+  }) {
     this.nearestNeighbor = this.getNearestNeighbor();
 
     // 初期ベクトルに現在の向きをセット
     let newDir = { ...this.direction };
 
-    const behaviors = this.behaviors;
     for (const behavior of behaviors) {
       newDir = add(
         newDir,

@@ -1,5 +1,7 @@
 import { BOID_COUNT, BOID_VELOCITY } from '../../shared/constants/settings';
+import { normalize, Vector } from '../../shared/libs/vector';
 import { Boid } from '../../entities/boid/index';
+import type { Behavior } from '../../entities/boid/behavior';
 import {
   cohesionBehavior,
   alignmentBehavior,
@@ -10,10 +12,17 @@ export class BoidSimulation {
   #boids: Boid[] = [];
   #ctx: CanvasRenderingContext2D;
   #loop: number | null = null;
+  #coreBehaviors: Behavior[] = []; // 常に適用される基本的な振る舞い
+  #temporaryBehaviors: Behavior[] = []; // 一時的な振る舞い
 
   constructor(ctx: CanvasRenderingContext2D) {
     this.#ctx = ctx;
     this.#boids = this.#createBoids();
+    this.#coreBehaviors = [
+      cohesionBehavior,
+      alignmentBehavior,
+      separationBehavior,
+    ];
   }
 
   /** ボイドを作成 */
@@ -32,7 +41,6 @@ export class BoidSimulation {
           velocity: BOID_VELOCITY + Math.random() * 4,
           color,
           flock: boids,
-          behaviors: [cohesionBehavior, alignmentBehavior, separationBehavior],
         })
       );
     }
@@ -54,8 +62,12 @@ export class BoidSimulation {
   #run() {
     this.#ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
+    const flockCenter = this.#calcFlockCenter();
     for (const boid of this.#boids) {
-      boid.update(this.#calcFlockCenter());
+      boid.update({
+        flockCenter,
+        behaviors: [...this.#coreBehaviors, ...this.#temporaryBehaviors],
+      });
       boid.edge(window.innerWidth, window.innerHeight);
       boid.draw(this.#ctx);
     }
@@ -67,6 +79,25 @@ export class BoidSimulation {
     if (value > 1000) return;
     this.clear();
     this.#boids = this.#createBoids(value);
+  }
+
+  applyPointerAttraction(pointerPosition: Vector) {
+    const pointerAttractionBehavior: Behavior = {
+      weight: 0.1,
+      compute: ({ boid }) => {
+        return normalize({
+          x: pointerPosition.x - boid.position.x,
+          y: pointerPosition.y - boid.position.y,
+        });
+      },
+    };
+    this.#temporaryBehaviors.push(pointerAttractionBehavior);
+
+    return () => {
+      this.#temporaryBehaviors = this.#temporaryBehaviors.filter(
+        b => b !== pointerAttractionBehavior
+      );
+    };
   }
 
   /** アニメーション開始 */

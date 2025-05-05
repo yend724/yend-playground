@@ -35,6 +35,27 @@ window.addEventListener('resize', () => {
   canvas.height = window.innerHeight;
 });
 
+let isPointerDown = false;
+let removePointerForce = () => {};
+const handlePointerPosition = (x: number, y: number) => {
+  removePointerForce();
+  removePointerForce = simulation.applyPointerAttraction({ x, y });
+};
+
+window.addEventListener('pointerdown', e => {
+  isPointerDown = true;
+  handlePointerPosition(e.clientX, e.clientY);
+});
+window.addEventListener('pointermove', e => {
+  if (isPointerDown) {
+    handlePointerPosition(e.clientX, e.clientY);
+  }
+});
+window.addEventListener('pointerup', () => {
+  isPointerDown = false;
+  removePointerForce();
+});
+
 startButton.addEventListener('click', () => {
   simulation.start();
 });
