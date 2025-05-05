@@ -1,4 +1,10 @@
-import { type Vector, normalize, add, scale } from '../../shared/libs/vector';
+import {
+  type Vector,
+  normalize,
+  add,
+  scale,
+  length,
+} from '../../shared/libs/vector';
 import type { Behavior } from './behavior';
 
 export class Boid {
@@ -48,11 +54,11 @@ export class Boid {
     ctx.restore();
   }
 
-  /** 1ステップ分の更新 */
-  update(flockCenter: Vector) {
-    // --- Search (最近接仲間) ---
+  /** 最近接仲間を取得 */
+  getNearestNeighbor(): Boid {
+    let nearestNeighbor: Boid = this;
     let minDistance = Infinity;
-    this.nearestNeighbor = this;
+
     for (const boid of this.flock) {
       // 前方にいるか
       const deltaX = boid.position.x - this.position.x;
@@ -63,9 +69,16 @@ export class Boid {
       const distance = Math.hypot(deltaX, deltaY);
       if (distance < minDistance) {
         minDistance = distance;
-        this.nearestNeighbor = boid;
+        nearestNeighbor = boid;
       }
     }
+
+    return nearestNeighbor;
+  }
+
+  /** 1ステップ分の更新 */
+  update(flockCenter: Vector) {
+    this.nearestNeighbor = this.getNearestNeighbor();
 
     // 初期ベクトルに現在の向きをセット
     let newDir = { ...this.direction };
@@ -74,7 +87,13 @@ export class Boid {
     for (const behavior of behaviors) {
       newDir = add(
         newDir,
-        scale(behavior.compute(this, flockCenter), behavior.weight)
+        scale(
+          behavior.compute({
+            boid: this,
+            flockCenterPosition: flockCenter,
+          }),
+          behavior.weight
+        )
       );
     }
 
@@ -85,7 +104,7 @@ export class Boid {
     this.position.y += this.direction.y * this.velocity;
   }
 
-  /** 画面端反射 */
+  /** 画面端処理 */
   edge(width: number, height: number) {
     const padding = 20;
     const wrap = (value: number, max: number): number => {

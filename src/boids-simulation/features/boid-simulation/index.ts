@@ -10,10 +10,11 @@ export class BoidSimulation {
   #boids: Boid[] = [];
   #ctx: CanvasRenderingContext2D;
   #loop: number | null = null;
-
+  flockCenter: { x: number; y: number };
   constructor(ctx: CanvasRenderingContext2D) {
     this.#ctx = ctx;
     this.#boids = this.#createBoids();
+    this.flockCenter = this.#calcFlockCenter();
   }
 
   #createBoids(): Boid[] {

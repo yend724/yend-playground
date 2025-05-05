@@ -8,5 +8,5 @@ export type Behavior = {
    * Boid インスタンスと群れの重心を受け取り、
    * 反映すべきステアリングベクトルを返す
    */
-  compute(boidInstance: Boid, flockCenterPosition: Vector): Vector;
+  compute(params: { boid: Boid; flockCenterPosition: Vector }): Vector;
 };
