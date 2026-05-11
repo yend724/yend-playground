@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Duotone Noise — Inspector</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="preview">
+    <div class="stage">
+      <svg id="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" preserveAspectRatio="none">
+        <defs>
+          <!-- Layer 1: Color1 用の独立ノイズ -->
+          <filter id="noise1" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+            <feTurbulence id="turb1" type="fractalNoise" baseFrequency="0.7" numOctaves="1" seed="1" stitchTiles="stitch" result="n"/>
+            <feColorMatrix in="n" type="matrix" values="
+              1 0 0 0 0
+              1 0 0 0 0
+              1 0 0 0 0
+              0 0 0 0 1" result="mono"/>
+            <feComponentTransfer in="mono">
+              <feFuncR id="f1R" type="discrete" tableValues="0 0 0 0 0.525"/>
+              <feFuncG id="f1G" type="discrete" tableValues="0 0 0 0 0.525"/>
+              <feFuncB id="f1B" type="discrete" tableValues="0 0 0 0 0.525"/>
+              <feFuncA id="f1A" type="discrete" tableValues="0 0 0 0 0.35"/>
+            </feComponentTransfer>
+          </filter>
+
+          <!-- Layer 2: Color2 用の独立ノイズ(別シード) -->
+          <filter id="noise2" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+            <feTurbulence id="turb2" type="fractalNoise" baseFrequency="0.7" numOctaves="1" seed="500" stitchTiles="stitch" result="n"/>
+            <feColorMatrix in="n" type="matrix" values="
+              1 0 0 0 0
+              1 0 0 0 0
+              1 0 0 0 0
+              0 0 0 0 1" result="mono"/>
+            <feComponentTransfer in="mono">
+              <feFuncR id="f2R" type="discrete" tableValues="0 0 0 0 1"/>
+              <feFuncG id="f2G" type="discrete" tableValues="0 0 0 0 1"/>
+              <feFuncB id="f2B" type="discrete" tableValues="0 0 0 0 1"/>
+              <feFuncA id="f2A" type="discrete" tableValues="0 0 0 0 0.35"/>
+            </feComponentTransfer>
+          </filter>
+        </defs>
+        <rect width="100%" height="100%" filter="url(#noise1)"/>
+        <rect width="100%" height="100%" filter="url(#noise2)"/>
+      </svg>
+    </div>
+  </div>
+
+  <aside class="panel" id="panel">
+    <details class="panel-details" id="panelDetails" open>
+      <summary class="panel-summary">設定</summary>
+
+      <div class="section">
+        <div class="field">
+          <label>サイズ</label>
+          <input type="range" id="sizeRange" min="1" max="10" step="1" value="3">
+          <div class="value" id="sizeValue">3</div>
+        </div>
+        <div class="field">
+          <label>密度</label>
+          <input type="range" id="densityRange" min="0" max="100" step="1" value="60">
+          <div class="value" id="densityValue">60%</div>
+        </div>
+        <p class="note">※ 密度は Color1 / Color2 の各レイヤーで独立に確率決定されます(全体密度を <code>P = 1 - (1 - p)²</code> から逆算して各層へ分配)。</p>
+      </div>
+
+      <div class="section">
+        <div class="section-label">Background</div>
+        <div class="color-row no-opacity">
+          <div class="swatch" style="background:#000000">
+            <input type="color" id="bgPicker" value="#000000">
+          </div>
+          <input type="text" class="hex-input" id="bgHex" value="#000000" maxlength="7">
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">Color 1</div>
+        <div class="color-row">
+          <div class="swatch" style="background:#868686">
+            <input type="color" id="color1Picker" value="#868686">
+          </div>
+          <input type="text" class="hex-input" id="color1Hex" value="#868686" maxlength="7">
+          <input type="text" class="opacity-input" id="color1Opacity" value="35">
+          <span class="percent">%</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">Color 2</div>
+        <div class="color-row">
+          <div class="swatch" style="background:#FFFFFF">
+            <input type="color" id="color2Picker" value="#FFFFFF">
+          </div>
+          <input type="text" class="hex-input" id="color2Hex" value="#FFFFFF" maxlength="7">
+          <input type="text" class="opacity-input" id="color2Opacity" value="35">
+          <span class="percent">%</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">Animation</div>
+        <div class="field">
+          <label>速度</label>
+          <input type="range" id="speedRange" min="0" max="10" step="1" value="2">
+          <div class="value" id="speedValue">2</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn" id="toggleBtn">Animate</button>
+        <button class="btn secondary" id="resetBtn">Reset</button>
+      </div>
+
+      <div class="section">
+        <div class="section-label">SVGコード</div>
+        <pre class="code-block" id="codeBlock"></pre>
+      </div>
+    </details>
+  </aside>
+
+<script src="script.js"></script>
+</body>
+</html>
