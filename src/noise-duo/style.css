@@ -50,6 +50,7 @@ body {
   right: 0;
   bottom: 0;
   width: 340px;
+  max-width: 100%;
   padding: 24px 20px;
   overflow-y: auto;
   overflow-x: hidden;
@@ -90,10 +91,6 @@ body:has(#panelDetails:not([open])) .panel {
 }
 .panel-details > summary::-webkit-details-marker { display: none; }
 .panel-details > summary::marker { content: ''; }
-
-@media (max-width: 800px) {
-  .panel { width: 100%; border-left: none; }
-}
 
 .panel-summary {
   position: fixed;
